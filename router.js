@@ -18,6 +18,6 @@ app.get("/patient-detail", (req, res) => {
   res.sendFile(__dirname + "/patient-detail.html");
 });
 
-app.listen((port = 52522), () => {
+app.listen((port = 52538), () => {
   console.log(`server started, port: ${port}`);
 });
