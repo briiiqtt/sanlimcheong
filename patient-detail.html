@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<link rel="stylesheet" href="/public/css/css.css">
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <span class="heading-main">환자 세부 정보</span>
+            </div>
+            <div class="col align-right">
+                <span id="" class="btnnn btn btn-warning float-right">임시저장</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">환자 정보</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">전화번호</span>
+                            <input type="text" class="form-control" placeholder="전화번호">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">이름</span>
+                            <input type="text" class="form-control" placeholder="이름">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">성별</span>
+                            <input type="text" class="form-control" placeholder="gender">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">나이</span>
+                            <input type="text" class="form-control" placeholder="age">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">비고</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">진단내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">처방내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span id="cancle" class="btnnn btn btn-secondary float-right">뒤로</span>
+            </div>
+            <div class="col align-right">
+            </div>
+        </div>
+    </div>
+
+</body>
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+<script>
+
+    window.onload = () => {
+        let temp = `
+        <div class="row">
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">기간</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="전화번호">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">이름</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="이름">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">성별</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="gender">
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">나이</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="age">
+                </div>
+            </div>
+        </div>
+        `
+        // $('#here').append(temp)
+    }
+
+
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'cancle') {
+            location.href = './main'
+        }
+        if (e.target.id === 'submit') {
+
+        }
+    })
+
+
+</script>
+
+</html>

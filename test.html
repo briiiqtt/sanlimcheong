@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+<body>
+
+    <div>
+        <h3>사용자등록</h3>
+        name <input type="text" id="name">
+        gender(M/F) <input type="text" id="gender">
+        birthday(YYYYMMDD) <input type="text" id="bd">
+        <button type="button" id="reg">submit</button>
+    </div>
+
+    <div>
+        <h3>사용자조회</h3>
+        device UUID <input type="text" id="dvuuid">
+        <button type="button" id="get">submit</button>
+    </div>
+
+</body>
+
+<script>
+
+    document.addEventListener('click', (e) => {
+        if ('BUTTON' === e.target.tagName) {
+            if ('reg' === e.target.id) {
+
+                fetch("http://cku-api.oneimmers.com:11000/api/v1/register", {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "x-auth-token": "rhksehdeoelwlxjfclfywp"
+                    },
+                    body: JSON.stringify({
+                        name: "hihi",
+                        gender: "M",
+                        birthday: "00000000"
+                    })
+                }).then(r => r.json()).then(r => console.log(r))
+
+            } else if ('get' === e.target.id) {
+                fetch("http://cku-api.oneimmers.com:11000/api/v1/users/hihi", {
+                    method: 'get',
+                    headers: {
+                        "x-auth-token": "rhksehdeoelwlxjfclfywp"
+                    },
+                }).then(r => r.json()).then(r => console.log(r))
+            }
+        }
+    })
+
+
+
+
+</script>
+
+</html>

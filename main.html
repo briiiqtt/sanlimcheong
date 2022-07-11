@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<link rel="stylesheet" href="/public/css/css.css">
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <span class="heading-main">환자리스트</span>
+                <span class="heading-sub">환자수: 명</span>
+            </div>
+            <div class="col align-right">
+                <span id="patient-reg" class="btnnn btn btn-warning float-right">환자등록</span>
+                <span class="btnnn btn btn-warning float-right">설정</span>
+            </div>
+        </div>
+        <div id="grid"></div>
+    </div>
+    </div>
+
+</body>
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<!-- <script src="/public/js/"></script> -->
+
+<script>
+    let gridData = [{ idx: 0, phone: '010', name: '이름', gender: '성별', age: 111, 'perc': 111 }]
+
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        data: gridData,
+        columns: [
+            {
+                header: '순번',
+                name: 'idx',
+            },
+            {
+                header: '전화번호',
+                name: 'phone',
+            },
+            {
+                header: '이름',
+                name: 'name',
+            },
+            {
+                header: '성별',
+                name: 'gender',
+            },
+            {
+                header: '나이',
+                name: 'age',
+            },
+            {
+                header: '처방전 수행률',
+                name: 'perc',
+            },
+        ]
+    });
+
+    document.addEventListener('click', (e) => {
+        console.log(e.target)
+        if (e.target.id === 'patient-reg') {
+            location.href = './patient-reg'
+        }
+    })
+</script>
+
+</html>
