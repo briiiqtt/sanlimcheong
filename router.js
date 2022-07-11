@@ -5,6 +5,9 @@ app.use("/public", express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
 app.get("/test", (req, res) => {
   res.sendFile(__dirname + "/test.html");
 });

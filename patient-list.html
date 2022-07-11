@@ -25,7 +25,6 @@
         </div>
         <div id="grid"></div>
     </div>
-    </div>
 
 </body>
 <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
@@ -67,9 +66,17 @@
     });
 
     document.addEventListener('click', (e) => {
-        console.log(e.target)
         if (e.target.id === 'patient-reg') {
             location.href = './patient-reg'
+        }
+    })
+
+    grid.on('click', (e) => {
+        if (e.targetType === 'cell') {
+
+            console.log(e)
+            console.log(grid.getRow(e.rowKey))
+
         }
     })
 </script>

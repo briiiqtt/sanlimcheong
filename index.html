@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<link rel="stylesheet" href="/public/css/css.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+<body>
+    <div id="app">
+    </div>
+
+</body>
+
+<script>
+
+    const patientListHtml = `<div class="container" id="patient-list">
+        <div class="row">
+            <div class="col"> 
+                <span class="heading-main">환자리스트</span>
+                <span class="heading-sub">환자수: 명</span>
+            </div>
+            <div class="col align-right">
+                <span data-pageto="patient-reg" data-cmd="move-page" class="btnnn btn btn-warning float-right">환자등록</span>
+                <span class="btnnn btn btn-warning float-right">설정</span>
+            </div>
+        </div>
+        <div id="grid"></div>
+    </div>`
+
+    const patientRegHtml = `<div class="container" id="patient-reg">
+        <div class="row">
+            <div class="col">
+                <span class="heading-main">환자 등록</span>
+            </div>
+            <div class="col align-right">
+                <span id="" class="btnnn btn btn-warning float-right">임시저장</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">환자 정보</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">전화번호</span>
+                            <input type="text" class="form-control" placeholder="전화번호">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">이름</span>
+                            <input type="text" class="form-control" placeholder="이름">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">성별</span>
+                            <input type="text" class="form-control" placeholder="gender">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">나이</span>
+                            <input type="text" class="form-control" placeholder="age">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">비고</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">진단내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">처방내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">기간</span>
+                                    <input type="text" class="form-control" placeholder="">
+                                    <span class="input-group-text">~</span>
+                                    <input type="text" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">처방내용</span>
+                                    <input type="text" class="form-control" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">시작시간</span>
+                                    <input type="text" class="form-control" placeholder="">
+                                    <span class="input-group-text">부터</span>
+
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">수행시간</span>
+                                    <input type="text" class="form-control" placeholder="">
+                                    <span class="input-group-text">분</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="here"></div>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span id="cancle" data-pageto="patient-list" data-cmd="move-page" class="btnnn btn btn-secondary float-right">취소</span>
+            </div>
+            <div class="col align-right">
+                <span id="submit" class="btnnn btn btn-warning float-right">완료</span>
+            </div>
+        </div>
+    </div>`
+
+    const patientDetailHtml = `<div class="container" id="patient-detail">
+        <div class="row">
+            <div class="col">
+                <span class="heading-main">환자 세부 정보</span>
+            </div>
+            <div class="col align-right">
+                <span id="" class="btnnn btn btn-warning float-right">임시저장</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">환자 정보</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">전화번호</span>
+                            <input id="pd-id" type="text" class="form-control" placeholder="전화번호">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">이름</span>
+                            <input id="pd-name" type="text" class="form-control" placeholder="이름">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">성별</span>
+                            <input id="pd-gender" type="text" class="form-control" placeholder="gender">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">나이</span>
+                            <input id="pd-age" type="text" class="form-control" placeholder="age">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">비고</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">진단내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">처방내용</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span id="cancle" data-pageto="patient-list" data-cmd="move-page" class="btnnn btn btn-secondary float-right">뒤로</span>
+            </div>
+            <div class="col align-right">
+            </div>
+        </div>
+    </div>`
+
+    $('#app').append(patientListHtml);
+    $('#app').append(patientRegHtml)
+    $('#app').append(patientDetailHtml);
+
+    const app = {
+        grid_patientList: null,
+        form_patientDetail: { phone: document.getElementById('pd-id'), name: document.getElementById('pd-name'), gender: document.getElementById('pd-gender'), age: document.getElementById('pd-age') },
+        toggleDivs: (page) => {
+            for (let child of document.getElementById('app').children) {
+                child.style.display = 'none';
+            }
+            document.getElementById(page).style.display = 'block';
+        },
+        drawPatientListGrid: () => {
+
+            if (app.grid_patientList === null) {
+                let gridData = [
+                    { idx: 0, phone: '010-8961-5423', name: 'dummy1', gender: 'gender', age: 22, 'perc': 11 },
+                    { idx: 1, phone: '010-2213-2521', name: 'dummy2', gender: 'gender', age: 23, 'perc': 11 },
+                    { idx: 2, phone: '010-2134-7821', name: 'dummy3', gender: 'gender', age: 11, 'perc': 11 },
+                    { idx: 3, phone: '010-2611-1241', name: 'dummy4', gender: 'gender', age: 7, 'perc': 11 }
+                ]
+                app.grid_patientList = new tui.Grid({
+                    el: document.getElementById('grid'),
+                    data: gridData,
+                    columns: [
+                        {
+                            header: '순번',
+                            name: 'idx',
+                        },
+                        {
+                            header: '전화번호',
+                            name: 'phone',
+                        },
+                        {
+                            header: '이름',
+                            name: 'name',
+                        },
+                        {
+                            header: '성별',
+                            name: 'gender',
+                        },
+                        {
+                            header: '나이',
+                            name: 'age',
+                        },
+                        {
+                            header: '처방전 수행률',
+                            name: 'perc',
+                        },
+                    ]
+                });
+
+                app.grid_patientList.on('click', (e) => {
+                    if (e.targetType === 'cell') {
+                        app.toggleDivs('patient-detail')
+
+                        //TODO: function getDetail(){
+                        let obj = app.grid_patientList.getRow(e.rowKey)
+                        app.form_patientDetail.phone.value = obj.phone;
+                        app.form_patientDetail.name.value = obj.name;
+                        app.form_patientDetail.gender.value = obj.gender;
+                        app.form_patientDetail.age.value = obj.age;
+                        //..
+                        //}
+
+                    }
+                })
+
+            } else {
+                //
+                //
+            }
+
+        }
+        , setPageMode: (page) => {
+            switch (page) {
+
+                case 'patient-list':
+                    app.toggleDivs('patient-list')
+                    app.drawPatientListGrid();
+                    break;
+
+                case 'patient-reg':
+                    app.toggleDivs('patient-reg')
+                    break;
+
+                case 'patient-detail':
+                    app.toggleDivs('patient-detail')
+                    break;
+
+            }
+
+        }
+    }
+
+    app.setPageMode('patient-list')
+
+    document.addEventListener('click', (e) => {
+        if (e.target.getAttribute('data-cmd') === 'move-page') {
+            console.log(e.target.getAttribute('data-pageto'))
+            //
+            app.setPageMode(e.target.getAttribute('data-pageto'))
+        }
+
+    })
+
+</script>
+
+</html>
