@@ -8,8 +8,8 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/test", (req, res) => {
   res.sendFile(__dirname + "/test.html");
 });
-app.get("/main", (req, res) => {
-  res.sendFile(__dirname + "/main.html");
+app.get("/patient-list", (req, res) => {
+  res.sendFile(__dirname + "/patient-list.html");
 });
 app.get("/patient-reg", (req, res) => {
   res.sendFile(__dirname + "/patient-reg.html");
