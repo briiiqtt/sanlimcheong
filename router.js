@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const xlsx = require("xlsx");
+
 app.use("/public", express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -19,6 +21,20 @@ app.get("/patient-reg", (req, res) => {
 });
 app.get("/patient-detail", (req, res) => {
   res.sendFile(__dirname + "/patient-detail.html");
+});
+
+app.post("/excel", (req, res) => {
+  let data = null;
+  try {
+    data = JSON.parse(req.body);
+  } catch (e) {
+    if (e instanceof TypeError) {
+    } else {
+      console.error(e);
+    }
+  }
+  const book = xlsx.utils.book_new();
+  const hihi = xlsx.utils.json_to_sheet(data);
 });
 
 app.listen((port = 52538), () => {

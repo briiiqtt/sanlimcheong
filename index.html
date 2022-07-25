@@ -14,6 +14,26 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 
+<style>
+    .text-align-right {
+        text-align: right;
+    }
+
+    .text-align-center {
+        text-align: center;
+    }
+
+    .radio-button {
+        width: 33%;
+    }
+
+    .radio1 {
+        display: flex;
+        justify-content: space-between;
+
+    }
+</style>
+
 <body>
     <div id="app">
     </div>
@@ -21,133 +41,18 @@
 </body>
 
 <script>
-
     const patientListHtml = `<div class="container" id="patient-list">
         <div class="row">
             <div class="col"> 
                 <span class="heading-main">환자리스트</span>
-                <span class="heading-sub">환자수: 명</span>
+                <span class="heading-sub">환자수: <b id="patientCount"></b>명</span>
             </div>
             <div class="col align-right">
-                <span data-pageto="patient-reg" data-cmd="move-page" class="btnnn btn btn-warning float-right">환자등록</span>
+                <!--<span data-pageto="patient-reg" data-cmd="move-page" class="btnnn btn btn-warning float-right">환자등록</span>-->
                 <span class="btnnn btn btn-warning float-right">설정</span>
             </div>
         </div>
         <div id="grid"></div>
-    </div>`
-
-    const patientRegHtml = `<div class="container" id="patient-reg">
-        <div class="row">
-            <div class="col">
-                <span class="heading-main">환자 등록</span>
-            </div>
-            <div class="col align-right">
-                <span id="" class="btnnn btn btn-warning float-right">임시저장</span>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">환자 정보</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">전화번호</span>
-                            <input type="text" class="form-control" placeholder="전화번호">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">이름</span>
-                            <input type="text" class="form-control" placeholder="이름">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">성별</span>
-                            <input type="text" class="form-control" placeholder="gender">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">나이</span>
-                            <input type="text" class="form-control" placeholder="age">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">비고</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">진단내용</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">처방내용</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">기간</span>
-                                    <input type="text" class="form-control" placeholder="">
-                                    <span class="input-group-text">~</span>
-                                    <input type="text" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">처방내용</span>
-                                    <input type="text" class="form-control" placeholder="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">시작시간</span>
-                                    <input type="text" class="form-control" placeholder="">
-                                    <span class="input-group-text">부터</span>
-
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">수행시간</span>
-                                    <input type="text" class="form-control" placeholder="">
-                                    <span class="input-group-text">분</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="here"></div>
-                    </div>
-                </div><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <span id="cancle" data-pageto="patient-list" data-cmd="move-page" class="btnnn btn btn-secondary float-right">취소</span>
-            </div>
-            <div class="col align-right">
-                <span id="submit" class="btnnn btn btn-warning float-right">완료</span>
-            </div>
-        </div>
     </div>`
 
     const patientDetailHtml = `<div class="container" id="patient-detail">
@@ -156,7 +61,7 @@
                 <span class="heading-main">환자 세부 정보</span>
             </div>
             <div class="col align-right">
-                <span id="" class="btnnn btn btn-warning float-right">임시저장</span>
+                <span id="pd-modify" data-cmd="pd-modify" class="btnnn btn btn-warning float-right">수정</span>
             </div>
         </div>
         <div class="card">
@@ -164,32 +69,252 @@
                 <h5 class="card-title">환자 정보</h5>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">전화번호</span>
-                            <input id="pd-id" type="text" class="form-control" placeholder="전화번호">
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">개인정보</h5>
                     </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">이름</span>
-                            <input id="pd-name" type="text" class="form-control" placeholder="이름">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">성별</span>
-                            <input id="pd-gender" type="text" class="form-control" placeholder="gender">
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">나이</span>
-                            <input id="pd-age" type="text" class="form-control" placeholder="age">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">이름</span>
+                                        <input id="pd-name" type="text" class="form-control" placeholder="name" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">성별</span>
+                                        <input id="pd-gender" type="text" class="form-control" placeholder="M or F" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">생년월일</span>
+                                        <input id="pd-birthday" type="text" class="form-control" placeholder="YYYY/MM/DD" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">임상기간</span>
+                                    <input id="pd-term" type="text" class="form-control" placeholder="ex) 0개월, 0주일, 00일, ..." readonly>
+                                </div>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">기기정보</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">미밴드 UID</span>
+                                    <input id="pd-mi" type="text" class="form-control" placeholder="Mi band UID" readonly>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">오큘러스퀘스트2 UID</span>
+                                    <input id="pd-oq" type="text" class="form-control" placeholder="Oculus Quest2 UID" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">신체계측</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">신장</span>
+                                    <input id="pd-height" type="text" class="form-control text-align-right" value="0" placeholder="숫자만 입력하세요" onKeyUp="app.patientDetail_setBMI()" readonly>
+                                    <span class="input-group-text">m</span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">체중</span>
+                                    <input id="pd-weight" type="text" class="form-control text-align-right" value="0" placeholder="숫자만 입력하세요" onKeyUp="app.patientDetail_setBMI()" readonly>
+                                    <span class="input-group-text">kg</span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">BMI</span>
+                                    <input id="pd-bmi" type="text" class="form-control" value="0" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">흡연력</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">흡연 여부</span>
+                                    <input type="radio" class="btn-check" name="cigar" id="cigar-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success radio-button" for="cigar-yes">예</label>
+                                    <input type="radio" class="btn-check" name="cigar" id="cigar-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success radio-button" for="cigar-no">아니오</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">하루 평균 담배 개수</span>
+                                    <input id="pd-cigar-count" type="text" class="form-control text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                    <span class="input-group-text">개</span>
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">흡연 연수</span>
+                                    <input id="pd-cigar-year" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                    <span class="input-group-text">년</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">음주력</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <br>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">음주 여부</span>
+                                    <input type="radio" class="btn-check" name="alcohol" id="alcohol-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success radio-button" for="alcohol-yes">예</label>
+                                    <input type="radio" class="btn-check" name="alcohol" id="alcohol-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success radio-button" for="alcohol-no">아니오</label>
+                                </div>
+                                 <div class="input-group mb-3">
+                                    <span class="input-group-text">주당 음주 횟수</span>
+                                    <input id="pd-alcohol-per-week" type="text" class="form-control text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                    <span class="input-group-text">회</span>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">음주 연수</span>
+                                    <input id="pd-alcohol-year" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                    <span class="input-group-text">년</span>
+                                </div>
+                            </div>
+                            <div class="card col-6">
+                                <div class="card-header">
+                                    <h5 class="card-title">1회 음주량</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">소주</span>
+                                                <input id="alcohol-sodu" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                                <span class="input-group-text">병</span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">맥주</span>
+                                                <input id="alcohol-beer" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                                <span class="input-group-text">병</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">막걸리</span>
+                                                <input id="alcohol-makgeolri" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                                <span class="input-group-text">병</span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">기타</span>
+                                                <input id="alcohol-etc" type="text" class="form-control  text-align-right" value="0" placeholder="숫자만 입력하세요" readonly>
+                                                <span class="input-group-text">병</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">질환력</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="w-50">
+                            <div class="input-group mb-3 radio1">
+                                <span class="input-group-text">고혈압 진단 받은 적 있습니까?</span>
+                                <span>
+                                    <input type="radio" class="btn-check" name="high-blood-pressure" id="hbp-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success" for="hbp-yes">예</label>
+                                    <input type="radio" class="btn-check" name="high-blood-pressure" id="hbp-no" autocomplete="off"  disabled checked>
+                                    <label class="btn btn-outline-success" for="hbp-no">아니오</label>
+                                </span>
+                            </div>
+                            <div class="input-group mb-3 radio1">
+                                <span class="input-group-text">당뇨 진단 받은 적 있습니까?</span>
+                                <span>
+                                    <input type="radio" class="btn-check" name="diabetes" id="db-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success" for="db-yes">예</label>
+                                    <input type="radio" class="btn-check" name="diabetes" id="db-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success" for="db-no">아니오</label>
+                                </span>
+                            </div>
+                            <div class="input-group mb-3 radio1">
+                                <span class="input-group-text">우울 및 불안 등의 정신장애를 진단 받은 적 있습니까?</span>
+                                <span>
+                                    <input type="radio" class="btn-check" name="depression" id="dp-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success" for="dp-yes">예</label>
+                                    <input type="radio" class="btn-check" name="depression" id="dp-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success" for="dp-no">아니오</label>
+                                </span>
+                            </div>
+                            <div class="input-group mb-3 radio1">
+                                <span class="input-group-text">암을 진단받은 적 있습니까?</span>
+                                <span>
+                                    <input type="radio" class="btn-check" name="cancer" id="cc-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success" for="cc-yes">예</label>
+                                    <input type="radio" class="btn-check" name="cancer" id="cc-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success" for="cc-no">아니오</label>
+                                </span>
+                            </div>
+                            <div class="input-group mb-3 radio1">
+                                <span class="input-group-text">수면장애를 진단 받은 적 있습니까?</span>
+                                <span>
+                                    <input type="radio" class="btn-check" name="somnipathy" id="sp-yes" autocomplete="off" disabled>
+                                    <label class="btn btn-outline-success" for="sp-yes">예</label>
+                                    <input type="radio" class="btn-check" name="somnipathy" id="sp-no" autocomplete="off" disabled checked>
+                                    <label class="btn btn-outline-success" for="sp-no">아니오</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
 
                 <div class="card">
                     <div class="card-header">
@@ -197,7 +322,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled></textarea>
                         </div>
                     </div>
                 </div><br>
@@ -207,7 +332,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled></textarea>
                         </div>
                     </div>
                 </div><br>
@@ -217,7 +342,7 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled></textarea>
                         </div>
                     </div>
                 </div><br>
@@ -233,12 +358,30 @@
     </div>`
 
     $('#app').append(patientListHtml);
-    $('#app').append(patientRegHtml)
     $('#app').append(patientDetailHtml);
 
     const app = {
+        pd_isModifying: false,
         grid_patientList: null,
-        form_patientDetail: { phone: document.getElementById('pd-id'), name: document.getElementById('pd-name'), gender: document.getElementById('pd-gender'), age: document.getElementById('pd-age') },
+        form_patientDetail: {
+            name: document.getElementById('pd-name'),
+            gender: document.getElementById('pd-gender'),
+            birthday: document.getElementById('pd-birthday'),
+            miBandUID: document.getElementById('pd-mi'),
+            OQ2UID: document.getElementById('pd-oq'),
+            term: document.getElementById('pd-term'),
+            height: document.getElementById('pd-height'),
+            weight: document.getElementById('pd-weight'),
+            bmi: document.getElementById('pd-bmi'),
+        },
+        patientDetail_getBMI: () => {
+            let height = parseFloat(app.form_patientDetail.height.value);
+            let weight = parseFloat(app.form_patientDetail.weight.value);
+            return (weight / (height * height)).toFixed(1);
+        },
+        patientDetail_setBMI: () => {
+            app.form_patientDetail.bmi.value = app.patientDetail_getBMI();
+        },
         toggleDivs: (page) => {
             for (let child of document.getElementById('app').children) {
                 child.style.display = 'none';
@@ -249,10 +392,10 @@
 
             if (app.grid_patientList === null) {
                 let gridData = [
-                    { idx: 0, phone: '010-8961-5423', name: 'dummy1', gender: 'gender', age: 22, 'perc': 11 },
-                    { idx: 1, phone: '010-2213-2521', name: 'dummy2', gender: 'gender', age: 23, 'perc': 11 },
-                    { idx: 2, phone: '010-2134-7821', name: 'dummy3', gender: 'gender', age: 11, 'perc': 11 },
-                    { idx: 3, phone: '010-2611-1241', name: 'dummy4', gender: 'gender', age: 7, 'perc': 11 }
+                    { idx: 0, phone: '010-8961-5423', name: 'dummy1', gender: 'gender', birthday: "2000/01/01", 'perc': 11 },
+                    { idx: 1, phone: '010-2213-2521', name: 'dummy2', gender: 'gender', birthday: "2000/01/01", 'perc': 11 },
+                    { idx: 2, phone: '010-2134-7821', name: 'dummy3', gender: 'gender', birthday: "2000/01/01", 'perc': 11 },
+                    { idx: 3, phone: '010-2611-1241', name: 'dummy4', gender: 'gender', birthday: "2000/01/01", 'perc': 11 }
                 ]
                 app.grid_patientList = new tui.Grid({
                     el: document.getElementById('grid'),
@@ -275,8 +418,8 @@
                             name: 'gender',
                         },
                         {
-                            header: '나이',
-                            name: 'age',
+                            header: '생년월일',
+                            name: 'birthday',
                         },
                         {
                             header: '처방전 수행률',
@@ -291,14 +434,25 @@
 
                         //TODO: function getDetail(){
                         let obj = app.grid_patientList.getRow(e.rowKey)
-                        app.form_patientDetail.phone.value = obj.phone;
+                        app.form_patientDetail.birthday.value = obj.birthday;
                         app.form_patientDetail.name.value = obj.name;
                         app.form_patientDetail.gender.value = obj.gender;
-                        app.form_patientDetail.age.value = obj.age;
+                        app.form_patientDetail.birthday.value = obj.birthday;
                         //..
                         //}
 
                     }
+                })
+
+                app.grid_patientList.writePatientCountOnSubtitle = () => {
+                    document.getElementById('patientCount').innerHTML = app.grid_patientList.getRowCount();
+                }
+
+                app.grid_patientList.on('onGridMounted', (e) => {
+                    app.grid_patientList.writePatientCountOnSubtitle();
+                })
+                app.grid_patientList.on('onGridUpdated', (e) => {
+                    app.grid_patientList.writePatientCountOnSubtitle();
                 })
 
             } else {
@@ -332,9 +486,47 @@
 
     document.addEventListener('click', (e) => {
         if (e.target.getAttribute('data-cmd') === 'move-page') {
+
+            if (app.pd_isModifying) {
+                alert('수정을 먼저 완료해주십시오.')
+                return;
+            }
+
             console.log(e.target.getAttribute('data-pageto'))
             //
             app.setPageMode(e.target.getAttribute('data-pageto'))
+        }
+        else if (e.target.getAttribute('data-cmd') === 'pd-modify') {
+
+            app.pd_isModifying = !app.pd_isModifying;
+
+            const toggleDisabledAndReadOnly = () => {
+                let inputs = document.getElementsByTagName('input');
+                let textAreas = document.getElementsByTagName('textarea');
+
+                for (let i in inputs) {
+                    inputs[i].readOnly = !app.pd_isModifying;
+                    inputs[i].disabled = !app.pd_isModifying;
+                }
+                for (let i in textAreas) {
+                    textAreas[i].readOnly = !app.pd_isModifying;
+                    textAreas[i].disabled = !app.pd_isModifying;
+                }
+            }
+
+            if (app.pd_isModifying) {
+                e.target.innerHTML = "완료"
+                let inputs = document.getElementsByTagName('input');
+                toggleDisabledAndReadOnly();
+
+            } else {
+                let doModify = confirm('수정하시겠습니까?');
+                if (!doModify) return;
+
+                e.target.innerHTML = "수정"
+                toggleDisabledAndReadOnly();
+            }
+
         }
 
     })
